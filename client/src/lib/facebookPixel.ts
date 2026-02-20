@@ -5,16 +5,18 @@
 
 declare global {
   interface Window {
-    fbq: (
+    fbq?: (
       action: "init" | "track" | "trackCustom",
       eventName: string,
       params?: Record<string, unknown>
     ) => void;
     _fbq?: typeof window.fbq;
+    __FB_PIXEL_ID__?: string;
   }
 }
 
 const PIXEL_ID = import.meta.env.VITE_FACEBOOK_PIXEL_ID as string | undefined;
+const PIXEL_DEBUG = import.meta.env.VITE_FACEBOOK_PIXEL_DEBUG === "true";
 
 function loadPixelScript(): void {
   if (typeof window === "undefined" || window.fbq) return;
@@ -33,15 +35,22 @@ function loadPixelScript(): void {
 }
 
 /**
- * Inicializa o pixel e dispara PageView (chame uma vez no carregamento do app).
+ * Define o ID do pixel no global para o script em index.html carregar o pixel.
+ * Se após 500ms o pixel não existir (HTML sem script), carrega via JS como fallback.
  */
-export function initFacebookPixel(): void {
+export function setFacebookPixelId(): void {
   if (!PIXEL_ID || !PIXEL_ID.trim()) return;
-  loadPixelScript();
-  scriptReady(() => {
-    window.fbq("init", PIXEL_ID!);
-    window.fbq("track", "PageView");
-  });
+  window.__FB_PIXEL_ID__ = PIXEL_ID;
+  setTimeout(() => {
+    if (window.fbq) return;
+    loadPixelScript();
+    scriptReady(() => {
+      if (window.fbq) {
+        window.fbq("init", PIXEL_ID!);
+        window.fbq("track", "PageView");
+      }
+    });
+  }, 500);
 }
 
 function scriptReady(cb: () => void): void {
@@ -60,18 +69,37 @@ function scriptReady(cb: () => void): void {
 
 /**
  * Dispara o evento Purchase (use na página de sucesso da compra).
- * Enviamos só value e currency para evitar bloqueio por políticas da Meta.
+ * Só value e currency para evitar bloqueio por políticas da Meta.
+ * Se Purchase for bloqueado, use VITE_FACEBOOK_PIXEL_DEBUG=true e confira
+ * o evento "CompraTeste" no Events Manager (se aparecer = pixel OK, Purchase que está bloqueado).
  */
 export function trackFacebookPurchase(params: {
   value: number;
   currency?: string;
 }): void {
   if (!PIXEL_ID || !PIXEL_ID.trim()) return;
-  if (!window.fbq) return;
-  window.fbq("track", "Purchase", {
-    value: params.value,
-    currency: params.currency ?? "BRL",
-  });
+
+  const value = params.value;
+  const currency = params.currency ?? "BRL";
+  const payload = { value, currency };
+
+  const send = () => {
+    if (typeof window === "undefined") return false;
+    const fbq = (window as Window & { fbq?: typeof window.fbq }).fbq;
+    if (!fbq) return false;
+    fbq("track", "Purchase", payload);
+    if (PIXEL_DEBUG) fbq("trackCustom", "CompraTeste", { value });
+    return true;
+  };
+
+  if (send()) return;
+
+  let attempts = 0;
+  const maxAttempts = 250;
+  const interval = setInterval(() => {
+    attempts++;
+    if (send() || attempts >= maxAttempts) clearInterval(interval);
+  }, 20);
 }
 
 export function isFacebookPixelEnabled(): boolean {
