@@ -8,6 +8,7 @@ import Home from "./pages/Home";
 import Checkout from "./pages/Checkout";
 import Payment from "./pages/Payment";
 import Success from "./pages/Success";
+import TestarPixel from "./pages/TestarPixel";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -17,6 +18,7 @@ function Router() {
       <Route path="/checkout/:productId" component={Checkout} />
       <Route path="/payment/:orderId" component={Payment} />
       <Route path="/success/:orderId" component={Success} />
+      <Route path="/testar-pixel" component={TestarPixel} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
