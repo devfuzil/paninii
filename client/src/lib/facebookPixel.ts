@@ -60,22 +60,17 @@ function scriptReady(cb: () => void): void {
 
 /**
  * Dispara o evento Purchase (use na página de sucesso da compra).
+ * Enviamos só value e currency para evitar bloqueio por políticas da Meta.
  */
 export function trackFacebookPurchase(params: {
   value: number;
   currency?: string;
-  contentIds?: string[];
-  contentName?: string;
-  orderId?: string | number;
 }): void {
   if (!PIXEL_ID || !PIXEL_ID.trim()) return;
   if (!window.fbq) return;
   window.fbq("track", "Purchase", {
     value: params.value,
     currency: params.currency ?? "BRL",
-    content_ids: params.contentIds,
-    content_name: params.contentName,
-    order_id: params.orderId,
   });
 }
 

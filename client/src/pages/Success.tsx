@@ -50,9 +50,6 @@ export default function Success() {
     trackFacebookPurchase({
       value: order.productPrice / 100,
       currency: "BRL",
-      contentIds: [order.productId],
-      contentName: order.productName,
-      orderId: order.id,
     });
   }, [order]);
 
