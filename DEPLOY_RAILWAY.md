@@ -44,7 +44,15 @@ VITE_FRONTEND_FORGE_API_URL=https://sua-url.up.railway.app
 - Use um PostgreSQL (ex.: [Neon](https://neon.tech)) e rode o script `drizzle/setup-neon.sql` no banco.
 - Cole a connection string em `DATABASE_URL` no Railway.
 
-### 5. Notificações (opcional)
+### 5. Facebook / Meta Pixel (opcional)
+
+Para rastrear conversões (PageView + Purchase na página de sucesso):
+
+- `VITE_FACEBOOK_PIXEL_ID` = ID do seu pixel (ex.: `1234567890123456`)
+
+Deixe vazio ou não defina para não carregar o pixel.
+
+### 6. Notificações (opcional)
 
 Se quiser notificação ao receber pagamento (ex.: Manus/Forge):
 

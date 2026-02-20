@@ -1,9 +1,11 @@
+import { useEffect, useRef } from "react";
 import { useRoute, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle2, Package, Truck, Mail } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { Loader2 } from "lucide-react";
+import { trackFacebookPurchase } from "@/lib/facebookPixel";
 
 export default function Success() {
   const [, params] = useRoute("/success/:orderId");
@@ -40,6 +42,19 @@ export default function Success() {
   }
 
   const { order } = data;
+  const purchaseTracked = useRef(false);
+
+  useEffect(() => {
+    if (purchaseTracked.current || !order) return;
+    purchaseTracked.current = true;
+    trackFacebookPurchase({
+      value: order.productPrice / 100,
+      currency: "BRL",
+      contentIds: [order.productId],
+      contentName: order.productName,
+      orderId: order.id,
+    });
+  }, [order]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white py-12">

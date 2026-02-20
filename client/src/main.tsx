@@ -4,7 +4,10 @@ import { httpBatchLink } from "@trpc/client";
 import { createRoot } from "react-dom/client";
 import superjson from "superjson";
 import App from "./App";
+import { initFacebookPixel } from "./lib/facebookPixel";
 import "./index.css";
+
+initFacebookPixel();
 
 const queryClient = new QueryClient();
 
