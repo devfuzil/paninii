@@ -95,7 +95,7 @@ export default function Payment() {
               <ArrowLeft className="w-5 h-5 mr-2" />
               Voltar
             </Button>
-            <img src="/images/panini-logo.png" alt="Panini" className="h-10" />
+            <img src="https://w7.pngwing.com/pngs/205/564/png-transparent-fifa-world-cup-trophy-2014-fifa-world-cup-trophy-sport.png" alt="Copa" className="h-10" />
             <div className="flex items-center gap-2 text-white text-sm">
               <Lock className="w-4 h-4" />
               <span className="hidden md:inline">Compra Segura</span>

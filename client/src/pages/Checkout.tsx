@@ -183,8 +183,8 @@ export default function Checkout() {
               Voltar
             </Button>
             <img
-              src="/images/panini-logo.png"
-              alt="Panini"
+              src="https://w7.pngwing.com/pngs/205/564/png-transparent-fifa-world-cup-trophy-2014-fifa-world-cup-trophy-sport.png"
+              alt="Copa"
               className="h-10"
             />
             <div className="flex items-center gap-2 text-white text-sm">

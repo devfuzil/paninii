@@ -46,8 +46,8 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-center mb-4">
             <img
-              src="/images/panini-logo.png"
-              alt="Panini"
+              src="https://w7.pngwing.com/pngs/205/564/png-transparent-fifa-world-cup-trophy-2014-fifa-world-cup-trophy-sport.png"
+              alt="Copa"
               className="h-12 md:h-16"
             />
           </div>
