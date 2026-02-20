@@ -40,17 +40,20 @@ function loadPixelScript(): void {
  */
 export function setFacebookPixelId(): void {
   if (!PIXEL_ID || !PIXEL_ID.trim()) return;
-  window.__FB_PIXEL_ID__ = PIXEL_ID;
-  setTimeout(() => {
-    if (window.fbq) return;
+
+  if (typeof window === "undefined") return;
+
+  // Se script ainda não existe, carrega
+  if (!window.fbq) {
     loadPixelScript();
-    scriptReady(() => {
-      if (window.fbq) {
-        window.fbq("init", PIXEL_ID!);
-        window.fbq("track", "PageView");
-      }
-    });
-  }, 500);
+  }
+
+  scriptReady(() => {
+    if (!window.fbq) return;
+
+    window.fbq("init", PIXEL_ID);
+    window.fbq("track", "PageView");
+  });
 }
 
 function scriptReady(cb: () => void): void {
