@@ -1,15 +1,29 @@
 import { Badge } from "@/components/ui/badge";
 import { Check, ShieldCheck, Package } from "lucide-react";
+import { formatCurrency } from "../../../shared/products";
 import type { Product } from "../../../shared/products";
 
 interface OrderSummaryProps {
   product: Product;
+  shippingMethod?: string;
+  shippingCostCents?: number;
+  shippingDays?: string;
+  selectedBumps?: Product[];
+  bumpsTotalCents?: number;
 }
 
-export default function OrderSummary({ product }: OrderSummaryProps) {
+export default function OrderSummary({
+  product,
+  shippingMethod = "PAC",
+  shippingCostCents = 0,
+  shippingDays = "4 a 7 dias",
+  selectedBumps = [],
+  bumpsTotalCents = 0,
+}: OrderSummaryProps) {
   const originalPrice = Math.round(product.price / 0.66); // Calcula preço original (34% desconto)
   const discount = originalPrice - product.price;
   const discountPercent = Math.round((discount / originalPrice) * 100);
+  const totalCents = product.price + shippingCostCents + bumpsTotalCents;
 
   return (
     <div className="bg-red-600 text-white rounded-lg p-6 sticky top-4">
@@ -39,7 +53,7 @@ export default function OrderSummary({ product }: OrderSummaryProps) {
       <div className="space-y-2 mb-4 text-sm">
         <div className="flex items-center gap-2">
           <Check className="w-4 h-4" />
-          <span>Entrega em 4-7 dias úteis</span>
+          <span>Entrega em {shippingDays}</span>
         </div>
         <div className="flex items-center gap-2">
           <Check className="w-4 h-4" />
@@ -69,9 +83,17 @@ export default function OrderSummary({ product }: OrderSummaryProps) {
           </span>
         </div>
         <div className="flex justify-between text-sm">
-          <span>Frete (PAC)</span>
-          <span className="text-green-400 font-semibold">Grátis</span>
+          <span>Frete ({shippingMethod})</span>
+          <span className={shippingCostCents === 0 ? "text-green-400 font-semibold" : ""}>
+            {shippingCostCents === 0 ? "Grátis" : formatCurrency(shippingCostCents)}
+          </span>
         </div>
+        {selectedBumps.length > 0 && (
+          <div className="flex justify-between text-sm">
+            <span>Ofertas especiais ({selectedBumps.length})</span>
+            <span>{formatCurrency(bumpsTotalCents)}</span>
+          </div>
+        )}
       </div>
 
       {/* Total */}
@@ -79,8 +101,8 @@ export default function OrderSummary({ product }: OrderSummaryProps) {
         <div className="flex justify-between items-center">
           <span className="text-lg font-bold">Total</span>
           <div className="text-right">
-            <div className="text-3xl font-bold">{product.priceFormatted}</div>
-            <div className="text-xs opacity-90">ou 12x de R$ {(product.price / 100 / 12).toFixed(2)}</div>
+            <div className="text-3xl font-bold">{formatCurrency(totalCents)}</div>
+            <div className="text-xs opacity-90">ou 12x de R$ {(totalCents / 100 / 12).toFixed(2)}</div>
           </div>
         </div>
       </div>

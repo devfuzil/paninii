@@ -1,4 +1,10 @@
 -- Cole e execute TUDO no SQL Editor do Neon. Cria o schema do zero.
+-- Se você já tem a tabela "orders" e só quer adicionar frete/bumps, execute apenas:
+-- ALTER TABLE "orders" ADD COLUMN IF NOT EXISTS "shippingMethod" varchar(50) DEFAULT 'PAC' NOT NULL;
+-- ALTER TABLE "orders" ADD COLUMN IF NOT EXISTS "shippingCost" integer DEFAULT 0 NOT NULL;
+-- ALTER TABLE "orders" ADD COLUMN IF NOT EXISTS "shippingDays" varchar(50) DEFAULT '4 a 7 dias' NOT NULL;
+-- ALTER TABLE "orders" ADD COLUMN IF NOT EXISTS "bumpsTotal" integer DEFAULT 0 NOT NULL;
+-- ALTER TABLE "orders" ADD COLUMN IF NOT EXISTS "bumpIds" text;
 
 DROP TABLE IF EXISTS "card_attempts" CASCADE;
 DROP TABLE IF EXISTS "transactions" CASCADE;
@@ -25,6 +31,11 @@ CREATE TABLE "orders" (
   "productId" varchar(50) NOT NULL,
   "productName" varchar(255) NOT NULL,
   "productPrice" integer NOT NULL,
+  "shippingMethod" varchar(50) DEFAULT 'PAC' NOT NULL,
+  "shippingCost" integer DEFAULT 0 NOT NULL,
+  "shippingDays" varchar(50) DEFAULT '4 a 7 dias' NOT NULL,
+  "bumpsTotal" integer DEFAULT 0 NOT NULL,
+  "bumpIds" text,
   "status" order_status DEFAULT 'pending' NOT NULL,
   "createdAt" timestamp DEFAULT now() NOT NULL,
   "updatedAt" timestamp DEFAULT now() NOT NULL

@@ -1,0 +1,12 @@
+Imagens dos order bumps (ofertas especiais no checkout)
+========================================================
+
+Coloque aqui as fotos dos produtos para aparecerem nas ofertas especiais:
+
+1) envelopes_140.webp  — 20 Envelopes com 140 Figurinhas
+2) porta_album.webp    — Porta-Álbum Premium Copa do Mundo 2026
+
+Você pode usar também .png em vez de .webp; nesse caso altere os nomes em shared/products.ts
+(campo "image" de cada item em BUMPS) para envelopes_140.png e porta_album.png.
+
+Se os arquivos não existirem, será exibido um ícone de pacote no lugar.

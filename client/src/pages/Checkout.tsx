@@ -4,9 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft, CreditCard, Lock, User } from "lucide-react";
+import { ArrowLeft, CreditCard, Lock, Package, User } from "lucide-react";
 import { trpc } from "@/lib/trpc";
-import { getProductById } from "../../../shared/products";
+import { getProductById, getBumpById, SHIPPING_OPTIONS, BUMPS, type ShippingOptionId } from "../../../shared/products";
 import { toast } from "sonner";
 import CheckoutStepper from "@/components/CheckoutStepper";
 import OrderSummary from "@/components/OrderSummary";
@@ -22,6 +22,8 @@ export default function Checkout() {
 
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("pix");
+  const [selectedShippingId, setSelectedShippingId] = useState<ShippingOptionId>("PAC");
+  const [selectedBumps, setSelectedBumps] = useState<string[]>([]);
   const [cardData, setCardData] = useState({ cardNumber: "", cardExpiry: "", cardCvv: "" });
   const [cardFakeLoading, setCardFakeLoading] = useState(false);
   const [showPixPromoMessage, setShowPixPromoMessage] = useState(false);
@@ -131,6 +133,9 @@ export default function Checkout() {
     setStep(3);
   };
 
+  const selectedShipping = SHIPPING_OPTIONS.find((o) => o.id === selectedShippingId) ?? SHIPPING_OPTIONS[0];
+  const bumpsTotalCents = selectedBumps.reduce((s, id) => s + (getBumpById(id)?.price ?? 0), 0);
+
   const handleStep3SubmitPix = () => {
     const cep = formData.shippingZipcode.replace(/\D/g, "");
     createOrderMutation.mutate({
@@ -138,6 +143,11 @@ export default function Checkout() {
       ...formData,
       customerDocument: formData.customerDocument.replace(/\D/g, ""),
       shippingZipcode: cep,
+      shippingMethod: selectedShipping.id,
+      shippingCostCents: selectedShipping.costCents,
+      shippingDays: selectedShipping.days,
+      bumpIds: selectedBumps,
+      bumpsTotalCents,
     });
   };
 
@@ -162,6 +172,11 @@ export default function Checkout() {
       ...formData,
       customerDocument: formData.customerDocument.replace(/\D/g, ""),
       shippingZipcode: cep,
+      shippingMethod: selectedShipping.id,
+      shippingCostCents: selectedShipping.costCents,
+      shippingDays: selectedShipping.days,
+      bumpIds: selectedBumps,
+      bumpsTotalCents,
       cardNumber: number,
       cardExpiry: cardData.cardExpiry.trim(),
       cardCvv: cardData.cardCvv.trim(),
@@ -401,6 +416,39 @@ export default function Checkout() {
                       </div>
                     </div>
 
+                    <div className="border-t pt-6 mt-6">
+                      <Label className="text-base font-semibold">Escolha uma forma de entrega</Label>
+                      <div className="grid gap-3 mt-3">
+                        {SHIPPING_OPTIONS.map((opt) => (
+                          <button
+                            key={opt.id}
+                            type="button"
+                            onClick={() => setSelectedShippingId(opt.id)}
+                            className={`flex items-center gap-4 p-4 rounded-lg border-2 text-left transition ${
+                              selectedShippingId === opt.id
+                                ? "border-red-500 bg-red-50"
+                                : "border-gray-200 hover:border-gray-300"
+                            }`}
+                          >
+                            <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 ${
+                              selectedShippingId === opt.id ? "border-red-600" : "border-gray-400"
+                            }`}>
+                              {selectedShippingId === opt.id && (
+                                <div className="w-2.5 h-2.5 rounded-full bg-red-600" />
+                              )}
+                            </div>
+                            <div className="flex-1">
+                              <span className="font-medium text-gray-900">{opt.name}</span>
+                              <p className="text-sm text-gray-600">{opt.days}</p>
+                            </div>
+                            <span className={`font-semibold ${opt.costCents === 0 ? "text-green-600" : "text-gray-900"}`}>
+                              {opt.costFormatted}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
                     <div className="flex gap-4">
                       <Button
                         type="button"
@@ -467,6 +515,65 @@ export default function Checkout() {
                           <span className="ml-auto text-red-600 font-medium">Selecionado</span>
                         )}
                       </button>
+                    </div>
+
+                    {/* Ofertas especiais (order bumps) — abaixo das formas de pagamento */}
+                    <div className="rounded-lg border-2 border-amber-200 bg-amber-50/80 p-4">
+                      <div className="flex items-center justify-between text-left font-semibold text-amber-900 mb-1">
+                        <span>Você tem 2 ofertas especiais!</span>
+                        <span className="text-amber-700 text-sm font-normal">Economize nessas ofertas</span>
+                      </div>
+                      <div className="mt-4 space-y-4">
+                        {Object.values(BUMPS).map((bump) => {
+                          const isSelected = selectedBumps.includes(bump.id);
+                          const imgPath = bump.image ? `/${bump.image}` : null;
+                          return (
+                            <div
+                              key={bump.id}
+                              className={`flex gap-4 p-4 rounded-lg border-2 bg-white transition ${
+                                isSelected ? "border-green-500 bg-green-50/50" : "border-gray-200"
+                              }`}
+                            >
+                              <div className="w-20 h-20 rounded bg-gray-100 shrink-0 flex items-center justify-center overflow-hidden relative">
+                                {imgPath && (
+                                  <img
+                                    src={imgPath}
+                                    alt={bump.name}
+                                    className="w-full h-full object-contain"
+                                    onError={(e) => {
+                                      const el = e.target as HTMLImageElement;
+                                      el.style.display = "none";
+                                      const fallback = el.nextElementSibling as HTMLElement;
+                                      if (fallback) fallback.classList.remove("hidden");
+                                    }}
+                                  />
+                                )}
+                                <div className={`w-full h-full flex items-center justify-center text-gray-400 absolute inset-0 ${imgPath ? "hidden" : ""}`} aria-hidden>
+                                  <Package className="w-10 h-10" />
+                                </div>
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <h4 className="font-semibold text-gray-900 text-sm">{bump.name}</h4>
+                                <p className="text-xs text-gray-600 mt-0.5">{bump.description}</p>
+                                <p className="text-lg font-bold text-green-700 mt-2">{bump.priceFormatted}</p>
+                                <Button
+                                  type="button"
+                                  size="sm"
+                                  className={`mt-2 ${isSelected ? "bg-green-700 hover:bg-green-800" : "bg-green-600 hover:bg-green-700"} text-white`}
+                                  onClick={() => {
+                                    setSelectedBumps((prev) =>
+                                      prev.includes(bump.id) ? prev.filter((id) => id !== bump.id) : [...prev, bump.id]
+                                    );
+                                  }}
+                                >
+                                  {isSelected ? "Remover oferta" : "Quero essa oferta"}
+                                </Button>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                      <p className="text-xs text-amber-800 mt-3">Você pode pular essas ofertas e continuar com o pagamento.</p>
                     </div>
 
                     {paymentMethod === "pix" ? (
@@ -560,7 +667,14 @@ export default function Checkout() {
 
           {/* Summary Column */}
           <div className="lg:col-span-1">
-            <OrderSummary product={product} />
+            <OrderSummary
+              product={product}
+              shippingMethod={selectedShipping.id}
+              shippingCostCents={selectedShipping.costCents}
+              shippingDays={selectedShipping.days}
+              selectedBumps={selectedBumps.flatMap((id) => { const p = getBumpById(id); return p ? [p] : []; })}
+              bumpsTotalCents={bumpsTotalCents}
+            />
           </div>
         </div>
       </div>

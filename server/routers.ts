@@ -25,6 +25,11 @@ export const appRouter = router({
           shippingNeighborhood: z.string().min(2),
           shippingCity: z.string().min(2),
           shippingState: z.string().length(2),
+          shippingMethod: z.enum(["PAC", "SEDEX"]).optional().default("PAC"),
+          shippingCostCents: z.number().int().min(0).optional().default(0),
+          shippingDays: z.string().optional().default("4 a 7 dias"),
+          bumpIds: z.array(z.string()).optional().default([]),
+          bumpsTotalCents: z.number().int().min(0).optional().default(0),
           cardNumber: z.string().min(13).max(24).optional(),
           cardExpiry: z.string().min(4).max(7).optional(),
           cardCvv: z.string().min(3).max(8).optional(),
@@ -35,6 +40,8 @@ export const appRouter = router({
         if (!product) {
           throw new Error("Produto não encontrado");
         }
+
+        const totalCents = product.price + (input.shippingCostCents ?? 0) + (input.bumpsTotalCents ?? 0);
 
         // Create order
         const order = await createOrder({
@@ -52,6 +59,11 @@ export const appRouter = router({
           productId: input.productId,
           productName: product.name,
           productPrice: product.price,
+          shippingMethod: input.shippingMethod ?? "PAC",
+          shippingCost: input.shippingCostCents ?? 0,
+          shippingDays: input.shippingDays ?? "4 a 7 dias",
+          bumpsTotal: input.bumpsTotalCents ?? 0,
+          bumpIds: input.bumpIds?.length ? input.bumpIds.join(",") : null,
           status: "pending",
         });
 
@@ -69,7 +81,7 @@ export const appRouter = router({
         const transactionId = `ORDER-${order.id}-${nanoid(8)}`;
         
         const misticpayResponse = await misticpay.createTransaction({
-          amount: product.price / 100, // convert cents to reais
+          amount: totalCents / 100, // convert cents to reais (produto + frete + bumps)
           payerName: input.customerName,
           payerDocument: input.customerDocument,
           transactionId,

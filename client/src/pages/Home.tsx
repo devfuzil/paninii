@@ -145,51 +145,53 @@ export default function Home() {
               }`}
               onClick={() => setSelectedProduct("starter")}
             >
-              <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 mt-1">
-                  <div
-                    className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-                      selectedProduct === "starter"
-                        ? "border-green-500 bg-green-500"
-                        : "border-gray-300"
-                    }`}
-                  >
-                    {selectedProduct === "starter" && (
-                      <Check className="w-4 h-4 text-white" />
-                    )}
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-4">
+                <div className="flex items-start gap-4 min-w-0 flex-1">
+                  <div className="flex-shrink-0 mt-1">
+                    <div
+                      className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
+                        selectedProduct === "starter"
+                          ? "border-green-500 bg-green-500"
+                          : "border-gray-300"
+                      }`}
+                    >
+                      {selectedProduct === "starter" && (
+                        <Check className="w-4 h-4 text-white" />
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="flex-shrink-0">
+                    <img
+                      src="/images/1alb1box.webp"
+                      alt="Kit Iniciante"
+                      className="w-24 h-24 object-contain"
+                    />
+                  </div>
+
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-2 flex-wrap">
+                      <h3 className="text-xl font-bold">Kit Iniciante</h3>
+                      <Badge className="bg-green-500 text-white">-34%</Badge>
+                    </div>
+                    <p className="text-gray-600 mb-2">
+                      1 Álbum Capa Dura + 30 Pacotes
+                    </p>
+                    <div className="flex flex-wrap gap-2 mb-2">
+                      <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                        150 figurinhas
+                      </Badge>
+                      <Badge variant="outline" className="text-gray-600">
+                        Frete Grátis
+                      </Badge>
+                    </div>
+                    <p className="text-green-600 text-sm">Economia de R$ 50,00</p>
                   </div>
                 </div>
 
-                <div className="flex-shrink-0">
-                  <img
-                    src="/images/1alb1box.webp"
-                    alt="Kit Iniciante"
-                    className="w-24 h-24 object-contain"
-                  />
-                </div>
-
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-2">
-                    <h3 className="text-xl font-bold">Kit Iniciante</h3>
-                    <Badge className="bg-green-500 text-white">-34%</Badge>
-                  </div>
-                  <p className="text-gray-600 mb-2">
-                    1 Álbum Capa Dura + 30 Pacotes
-                  </p>
-                  <div className="flex flex-wrap gap-2 mb-2">
-                    <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                      150 figurinhas
-                    </Badge>
-                    <Badge variant="outline" className="text-gray-600">
-                      Frete Grátis
-                    </Badge>
-                  </div>
-                  <p className="text-green-600 text-sm">Economia de R$ 50,00</p>
-                </div>
-
-                <div className="text-right">
+                <div className="text-left sm:text-right flex-shrink-0 w-full sm:w-auto border-t border-gray-100 pt-4 sm:border-0 sm:pt-0">
                   <div className="text-gray-400 line-through text-sm">R$ 149,00</div>
-                  <div className="text-3xl font-bold text-green-600">R$ 97,00</div>
+                  <div className="text-2xl sm:text-3xl font-bold text-green-600 whitespace-nowrap">R$ 97,00</div>
                   <div className="text-gray-500 text-sm">via PIX</div>
                 </div>
               </div>
@@ -210,51 +212,53 @@ export default function Home() {
                 </Badge>
               </div>
 
-              <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 mt-1">
-                  <div
-                    className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-                      selectedProduct === "popular"
-                        ? "border-green-500 bg-green-500"
-                        : "border-gray-300"
-                    }`}
-                  >
-                    {selectedProduct === "popular" && (
-                      <Check className="w-4 h-4 text-white" />
-                    )}
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-4">
+                <div className="flex items-start gap-4 min-w-0 flex-1">
+                  <div className="flex-shrink-0 mt-1">
+                    <div
+                      className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
+                        selectedProduct === "popular"
+                          ? "border-green-500 bg-green-500"
+                          : "border-gray-300"
+                      }`}
+                    >
+                      {selectedProduct === "popular" && (
+                        <Check className="w-4 h-4 text-white" />
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="flex-shrink-0">
+                    <img
+                      src="/images/1alb2box.webp"
+                      alt="Kit Campeão"
+                      className="w-24 h-24 object-contain"
+                    />
+                  </div>
+
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-2 flex-wrap">
+                      <h3 className="text-xl font-bold">Kit Campeão</h3>
+                      <Badge className="bg-green-500 text-white">-34%</Badge>
+                    </div>
+                    <p className="text-gray-600 mb-2">
+                      1 Álbum Capa Dura + 60 Pacotes
+                    </p>
+                    <div className="flex flex-wrap gap-2 mb-2">
+                      <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                        300 figurinhas
+                      </Badge>
+                      <Badge variant="outline" className="text-gray-600">
+                        Frete Grátis
+                      </Badge>
+                    </div>
+                    <p className="text-green-600 text-sm">Economia de R$ 78,00</p>
                   </div>
                 </div>
 
-                <div className="flex-shrink-0">
-                  <img
-                    src="/images/1alb2box.webp"
-                    alt="Kit Campeão"
-                    className="w-24 h-24 object-contain"
-                  />
-                </div>
-
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-2">
-                    <h3 className="text-xl font-bold">Kit Campeão</h3>
-                    <Badge className="bg-green-500 text-white">-34%</Badge>
-                  </div>
-                  <p className="text-gray-600 mb-2">
-                    1 Álbum Capa Dura + 60 Pacotes
-                  </p>
-                  <div className="flex flex-wrap gap-2 mb-2">
-                    <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                      300 figurinhas
-                    </Badge>
-                    <Badge variant="outline" className="text-gray-600">
-                      Frete Grátis
-                    </Badge>
-                  </div>
-                  <p className="text-green-600 text-sm">Economia de R$ 78,00</p>
-                </div>
-
-                <div className="text-right">
+                <div className="text-left sm:text-right flex-shrink-0 w-full sm:w-auto border-t border-gray-100 pt-4 sm:border-0 sm:pt-0">
                   <div className="text-gray-400 line-through text-sm">R$ 227,00</div>
-                  <div className="text-3xl font-bold text-green-600">R$ 149,00</div>
+                  <div className="text-2xl sm:text-3xl font-bold text-green-600 whitespace-nowrap">R$ 149,00</div>
                   <div className="text-gray-500 text-sm">via PIX</div>
                 </div>
               </div>
@@ -275,51 +279,53 @@ export default function Home() {
                 </Badge>
               </div>
 
-              <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 mt-1">
-                  <div
-                    className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-                      selectedProduct === "complete"
-                        ? "border-green-500 bg-green-500"
-                        : "border-gray-300"
-                    }`}
-                  >
-                    {selectedProduct === "complete" && (
-                      <Check className="w-4 h-4 text-white" />
-                    )}
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-4">
+                <div className="flex items-start gap-4 min-w-0 flex-1">
+                  <div className="flex-shrink-0 mt-1">
+                    <div
+                      className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
+                        selectedProduct === "complete"
+                          ? "border-green-500 bg-green-500"
+                          : "border-gray-300"
+                      }`}
+                    >
+                      {selectedProduct === "complete" && (
+                        <Check className="w-4 h-4 text-white" />
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="flex-shrink-0">
+                    <img
+                      src="/images/1alb3box.webp"
+                      alt="Kit Colecionador"
+                      className="w-24 h-24 object-contain"
+                    />
+                  </div>
+
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-2 flex-wrap">
+                      <h3 className="text-xl font-bold">Kit Colecionador</h3>
+                      <Badge className="bg-green-500 text-white">-43%</Badge>
+                    </div>
+                    <p className="text-gray-600 mb-2">
+                      1 Álbum Capa Dura + 90 Pacotes
+                    </p>
+                    <div className="flex flex-wrap gap-2 mb-2">
+                      <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                        450 figurinhas
+                      </Badge>
+                      <Badge variant="outline" className="text-gray-600">
+                        Frete Grátis
+                      </Badge>
+                    </div>
+                    <p className="text-green-600 text-sm">Economia de R$ 148,00</p>
                   </div>
                 </div>
 
-                <div className="flex-shrink-0">
-                  <img
-                    src="/images/1alb3box.webp"
-                    alt="Kit Colecionador"
-                    className="w-24 h-24 object-contain"
-                  />
-                </div>
-
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-2">
-                    <h3 className="text-xl font-bold">Kit Colecionador</h3>
-                    <Badge className="bg-green-500 text-white">-43%</Badge>
-                  </div>
-                  <p className="text-gray-600 mb-2">
-                    1 Álbum Capa Dura + 90 Pacotes
-                  </p>
-                  <div className="flex flex-wrap gap-2 mb-2">
-                    <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                      450 figurinhas
-                    </Badge>
-                    <Badge variant="outline" className="text-gray-600">
-                      Frete Grátis
-                    </Badge>
-                  </div>
-                  <p className="text-green-600 text-sm">Economia de R$ 148,00</p>
-                </div>
-
-                <div className="text-right">
+                <div className="text-left sm:text-right flex-shrink-0 w-full sm:w-auto border-t border-gray-100 pt-4 sm:border-0 sm:pt-0">
                   <div className="text-gray-400 line-through text-sm">R$ 347,00</div>
-                  <div className="text-3xl font-bold text-green-600">R$ 199,00</div>
+                  <div className="text-2xl sm:text-3xl font-bold text-green-600 whitespace-nowrap">R$ 199,00</div>
                   <div className="text-gray-500 text-sm">via PIX</div>
                 </div>
               </div>
