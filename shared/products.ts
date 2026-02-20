@@ -12,21 +12,21 @@ export const PRODUCTS: Record<string, Product> = {
     id: "starter",
     name: "Kit Iniciante",
     description: "1 Álbum Capa Dura + 30 Pacotes",
-    price: 100, // R$ 1,00 (teste)
+    price: 500, // R$ 1,00 (teste)
     priceFormatted: "R$ 1,00",
   },
   popular: {
     id: "popular",
     name: "Kit Campeão",
     description: "1 Álbum Capa Dura + 60 Pacotes",
-    price: 100, // R$ 1,00 (teste)
+    price: 500, // R$ 1,00 (teste)
     priceFormatted: "R$ 1,00",
   },
   complete: {
     id: "complete",
     name: "Kit Colecionador",
     description: "1 Álbum Capa Dura + 90 Pacotes",
-    price: 100, // R$ 1,00 (teste)
+    price: 500, // R$ 1,00 (teste)
     priceFormatted: "R$ 1,00",
   },
 };
