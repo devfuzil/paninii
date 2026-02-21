@@ -3,7 +3,10 @@
   "buildCommand": "npx vite build",
   "outputDirectory": "dist/public",
   "rewrites": [
-    { "source": "/((?!api/).*)", "destination": "/index.html" }
+    {
+      "source": "^/((?!api/).*)$",
+      "destination": "/index.html"
+    }
   ],
   "functions": {
     "api/trpc/[...path].ts": { "maxDuration": 60 },
