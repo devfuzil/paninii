@@ -1,4 +1,4 @@
-import express from "express";
+import express, { type Request, type Response } from "express";
 import { getTransactionByMisticpayId, updateTransactionStatus, updateOrderStatus, getOrderById } from "./db";
 import { notifyOwner } from "./_core/notification";
 
@@ -58,7 +58,7 @@ export async function handleMisticpayWebhook(body: unknown): Promise<MisticpayWe
 
 export const webhookRouter = express.Router();
 
-webhookRouter.post("/misticpay", express.json(), async (req: express.Request, res: express.Response) => {
+webhookRouter.post("/misticpay", express.json(), async (req: Request, res: Response) => {
   try {
     const result = await handleMisticpayWebhook(req.body);
     if (result.ok) {
