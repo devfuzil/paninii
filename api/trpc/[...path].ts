@@ -1,8 +1,6 @@
 import type { IncomingMessage } from "node:http";
 import type { ServerResponse } from "node:http";
 import { nodeHTTPRequestHandler } from "@trpc/server/adapters/node-http";
-import { appRouter } from "../../server/routers";
-import { createNodeContext } from "../../server/_core/context";
 
 const TRPC_PREFIX = "/api/trpc";
 
@@ -14,6 +12,7 @@ function getPathFromUrl(url: string | undefined): string {
 }
 
 function sendError(res: ServerResponse, status: number, body: object) {
+  if (res.headersSent) return;
   res.setHeader("Content-Type", "application/json");
   res.statusCode = status;
   res.end(JSON.stringify(body));
@@ -21,6 +20,10 @@ function sendError(res: ServerResponse, status: number, body: object) {
 
 export default async function handler(req: IncomingMessage, res: ServerResponse) {
   try {
+    const [{ appRouter }, { createNodeContext }] = await Promise.all([
+      import("../../server/routers"),
+      import("../../server/_core/context"),
+    ]);
     const path = getPathFromUrl(req.url ?? "");
     await nodeHTTPRequestHandler({
       router: appRouter,
@@ -28,14 +31,16 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
       req,
       res,
       path,
-      maxBodySize: 50 * 1024 * 1024, // 50mb, align with Express
+      maxBodySize: 50 * 1024 * 1024,
     });
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
-    console.error("[api/trpc] Handler error:", message, err);
+    const stack = err instanceof Error ? err.stack : undefined;
+    console.error("[api/trpc] Handler error:", message, stack ?? err);
     sendError(res, 500, {
       error: "FUNCTION_INVOCATION_FAILED",
-      message: process.env.NODE_ENV === "development" ? message : "A server error has occurred",
+      message,
+      ...(process.env.VERCEL && process.env.VERCEL_ENV === "production" ? {} : { detail: stack }),
     });
   }
 }
