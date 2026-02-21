@@ -30,12 +30,13 @@ export async function handleMisticpayWebhook(body: unknown): Promise<MisticpayWe
     return { ok: false, status: 400, body: { error: "Missing required fields" } };
   }
 
+  const validStatus = status as "PENDENTE" | "COMPLETO" | "FALHA";
   const transaction = await getTransactionByMisticpayId(transactionId.toString());
   if (!transaction) {
     return { ok: false, status: 404, body: { error: "Transaction not found" } };
   }
 
-  await updateTransactionStatus(transaction.id, status);
+  await updateTransactionStatus(transaction.id, validStatus);
 
   const order = await getOrderById(transaction.orderId);
   if (!order) {
@@ -57,7 +58,7 @@ export async function handleMisticpayWebhook(body: unknown): Promise<MisticpayWe
 
 export const webhookRouter = express.Router();
 
-webhookRouter.post("/misticpay", express.json(), async (req, res) => {
+webhookRouter.post("/misticpay", express.json(), async (req: express.Request, res: express.Response) => {
   try {
     const result = await handleMisticpayWebhook(req.body);
     if (result.ok) {

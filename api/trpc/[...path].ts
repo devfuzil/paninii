@@ -1,8 +1,8 @@
 import type { IncomingMessage } from "node:http";
 import type { ServerResponse } from "node:http";
 import { nodeHTTPRequestHandler } from "@trpc/server/adapters/node-http";
-import { appRouter } from "../server/routers";
-import { createNodeContext } from "../server/_core/context";
+import { appRouter } from "../../server/routers";
+import { createNodeContext } from "../../server/_core/context";
 
 const TRPC_PREFIX = "/api/trpc";
 
