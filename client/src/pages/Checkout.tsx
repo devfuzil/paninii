@@ -198,8 +198,8 @@ export default function Checkout() {
               Voltar
             </Button>
             <img
-              src="/pngwing.com.png"
-              alt="Copa"
+              src="/paninilogo.webp"
+              alt="Panini"
               className="h-10"
             />
             <div className="flex items-center gap-2 text-white text-sm">
