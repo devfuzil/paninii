@@ -2,7 +2,9 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "npx vite build",
   "outputDirectory": "dist/public",
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
+  "rewrites": [
+    { "source": "/((?!api/).*)", "destination": "/index.html" }
+  ],
   "functions": {
     "api/trpc/[...path].ts": { "maxDuration": 60 },
     "api/webhook/misticpay.ts": { "maxDuration": 30 }
