@@ -1,12 +1,9 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "npx vite build",
+  "buildCommand": "node scripts/build-vercel-api.mjs && npx vite build",
   "outputDirectory": "dist/public",
   "rewrites": [
-    {
-      "source": "^/((?!api/).*)$",
-      "destination": "/index.html"
-    }
+    { "source": "^/((?!api/).*)$", "destination": "/index.html" }
   ],
   "functions": {
     "api/trpc/[...path].ts": { "maxDuration": 60 },

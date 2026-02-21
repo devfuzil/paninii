@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "outDir": "dist",
+    "rootDir": ".",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "allowImportingTsExtensions": false
+  },
+  "include": ["server/**/*", "shared/**/*", "drizzle/**/*"],
+  "exclude": ["node_modules", "**/*.test.ts", "server/_core/index.ts", "server/_core/vite.ts"]
+}

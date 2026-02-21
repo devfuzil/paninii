@@ -6,6 +6,9 @@
 dist/
 build/
 *.dist
+# Vercel API bundles (gerados no build)
+api/trpc/trpc-handler.js
+api/webhook/misticpay-handler.js
 
 # Environment variables
 .env
