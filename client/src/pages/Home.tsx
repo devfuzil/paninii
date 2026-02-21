@@ -46,8 +46,8 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-center mb-4">
             <img
-              src="/pngwing.com.png"
-              alt="Copa"
+              src="/paninilogo.webp"
+              alt="Panini"
               className="h-12 md:h-16"
             />
           </div>
