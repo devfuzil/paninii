@@ -13,14 +13,29 @@ function getPathFromUrl(url: string | undefined): string {
   return path || "";
 }
 
+function sendError(res: ServerResponse, status: number, body: object) {
+  res.setHeader("Content-Type", "application/json");
+  res.statusCode = status;
+  res.end(JSON.stringify(body));
+}
+
 export default async function handler(req: IncomingMessage, res: ServerResponse) {
-  const path = getPathFromUrl(req.url ?? "");
-  await nodeHTTPRequestHandler({
-    router: appRouter,
-    createContext: createNodeContext,
-    req,
-    res,
-    path,
-    maxBodySize: 50 * 1024 * 1024, // 50mb, align with Express
-  });
+  try {
+    const path = getPathFromUrl(req.url ?? "");
+    await nodeHTTPRequestHandler({
+      router: appRouter,
+      createContext: createNodeContext,
+      req,
+      res,
+      path,
+      maxBodySize: 50 * 1024 * 1024, // 50mb, align with Express
+    });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.error("[api/trpc] Handler error:", message, err);
+    sendError(res, 500, {
+      error: "FUNCTION_INVOCATION_FAILED",
+      message: process.env.NODE_ENV === "development" ? message : "A server error has occurred",
+    });
+  }
 }
